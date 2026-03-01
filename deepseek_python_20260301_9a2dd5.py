@@ -4414,30 +4414,31 @@ def give_command(message):
     
     bot.send_message(message.chat.id, f"✅ Ты отправил {format_number(amount)} кредиксов пользователю @{target_username}", parse_mode='Markdown')
 
-# ====================== ОТМЕНА ИГРЫ ======================
+ # ====================== ОТМЕНА ИГРЫ ======================
 @bot.message_handler(commands=['отмена', 'cancel'])
 def cancel_game_command(message):
     user_id = str(message.from_user.id)
     if is_banned(user_id):
         bot.send_message(message.chat.id, "⛔ Вы забанены!", parse_mode='Markdown')
         return
-    
+
     if cancel_user_game(user_id):
         bot.send_message(message.chat.id, "🛑 Игра отменена. Ставка возвращена.", parse_mode='Markdown')
     else:
         bot.send_message(message.chat.id, "❌ У тебя нет активной игры.", parse_mode='Markdown')
 
-# ====================== СТАРТ И ПОМОЩЬ ================
- @bot.message_handler(commands=['start', 'help', 'старт', 'помощь'])
+
+# ====================== СТАРТ И ПОМОЩЬ ======================
+@bot.message_handler(commands=['start', 'help', 'старт', 'помощь'])
 def start_help(message):
     try:
         user_id = str(message.from_user.id)
-        
+
         if message.from_user.username:
             update_username_cache(user_id, message.from_user.username)
-        
+
         user = get_user(user_id)
-        
+
         args = message.text.split()
         if len(args) > 1 and args[1].isdigit():
             referrer_id = args[1]
@@ -4449,10 +4450,9 @@ def start_help(message):
                     referrer['balance'] += bonus_data['referral_bonus']
                     referrer['krds_balance'] += 5
                     user['balance'] += 500
-                    # ВАЖНО: передаём 1 (приращение), а не общее количество
                     update_quest_progress(referrer_id, 'referrals', 1)
                     save_data()
-                    
+
                     try:
                         bot.send_message(int(referrer_id),
                             f"🎉 По твоей ссылке зарегистрировался новый игрок!\n"
@@ -4460,11 +4460,11 @@ def start_help(message):
                             f"💎 +5 KRDS", parse_mode='Markdown')
                     except:
                         pass
-        
+
         today = datetime.now().strftime('%Y-%m-%d')
         if today not in user['daily_quests']:
             generate_daily_quests(user_id)
-        
+
         text = (
             "🎰 ** ДОБРО ПОЖАЛОВАТЬ В kредиkс! ** 🎰\n\n"
             "💰 **Баланс:** /баланс\n"
@@ -4505,7 +4505,7 @@ def start_help(message):
             f"💬 Чат: {CHAT_LINK}"
         )
         bot.send_message(message.chat.id, text, parse_mode='Markdown')
-        
+
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
@@ -4514,7 +4514,7 @@ def start_help(message):
             message.chat.id,
             f"❌ Внутренняя ошибка:\n`{e}`\n\nПодробности в консоли.",
             parse_mode='Markdown'
-        )        
+        )   
 # ====================== СИСТЕМА ТЕЛЕФОНА ======================
 @bot.message_handler(commands=['телефон'])
 def phone_menu(message):
