@@ -4427,8 +4427,8 @@ def cancel_game_command(message):
     else:
         bot.send_message(message.chat.id, "❌ У тебя нет активной игры.", parse_mode='Markdown')
 
-# ====================== СТАРТ И ПОМОЩЬ ======================
-@bot.message_handler(commands=['start', 'help', 'старт', 'помощь'])
+# ====================== СТАРТ И ПОМОЩЬ ================
+ @bot.message_handler(commands=['start', 'help', 'старт', 'помощь'])
 def start_help(message):
     try:
         user_id = str(message.from_user.id)
@@ -4449,7 +4449,8 @@ def start_help(message):
                     referrer['balance'] += bonus_data['referral_bonus']
                     referrer['krds_balance'] += 5
                     user['balance'] += 500
-                    update_quest_progress(referrer_id, 'referrals', referrer['referrals'])
+                    # ВАЖНО: передаём 1, а не общее количество рефералов
+                    update_quest_progress(referrer_id, 'referrals', 1)
                     save_data()
                     
                     try:
@@ -4504,10 +4505,16 @@ def start_help(message):
             f"💬 Чат: {CHAT_LINK}"
         )
         bot.send_message(message.chat.id, text, parse_mode='Markdown')
-    except Exception as e:
-        print(f"Ошибка в start_help: {e}")
-        bot.send_message(message.chat.id, "❌ Произошла ошибка при обработке команды.", parse_mode='Markdown')
         
+    except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"❌ Ошибка в start_help: {e}\n{error_trace}")
+        bot.send_message(
+            message.chat.id,
+            f"❌ Внутренняя ошибка:\n`{e}`\n\nПодробности в консоли.",
+            parse_mode='Markdown'
+        )     
 # ====================== СИСТЕМА ТЕЛЕФОНА ======================
 @bot.message_handler(commands=['телефон'])
 def phone_menu(message):
