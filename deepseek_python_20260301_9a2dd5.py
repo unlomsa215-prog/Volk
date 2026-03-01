@@ -4505,10 +4505,6 @@ def start_help(message):
         )
         bot.send_message(message.chat.id, text, parse_mode='Markdown')
         
-    except Exception as e:
-        print(f"Ошибка в start_help: {e}")
-        bot.send_message(message.chat.id, "❌ Произошла внутренняя ошибка. Попробуйте позже.")
-
 # ====================== СИСТЕМА ТЕЛЕФОНА ======================
 @bot.message_handler(commands=['телефон'])
 def phone_menu(message):
@@ -5454,7 +5450,7 @@ if __name__ == '__main__':
     loan_checker.start()
     
     print("=" * 60)
-    print("✅ БОТ КАЗИНО ЗАПУЩЕН!")
+    print("✅ БОТ  ЗАПУЩЕН!")
     print("=" * 60)
     print("📋 СИСТЕМЫ:")
     print("  • 🎮 Все игры")
