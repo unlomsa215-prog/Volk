@@ -4449,7 +4449,7 @@ def start_help(message):
                     referrer['balance'] += bonus_data['referral_bonus']
                     referrer['krds_balance'] += 5
                     user['balance'] += 500
-                    # ВАЖНО: передаём 1, а не общее количество рефералов
+                    # ВАЖНО: передаём 1 (приращение), а не общее количество
                     update_quest_progress(referrer_id, 'referrals', 1)
                     save_data()
                     
@@ -4505,7 +4505,16 @@ def start_help(message):
             f"💬 Чат: {CHAT_LINK}"
         )
         bot.send_message(message.chat.id, text, parse_mode='Markdown')
-          
+        
+    except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"❌ Ошибка в start_help: {e}\n{error_trace}")
+        bot.send_message(
+            message.chat.id,
+            f"❌ Внутренняя ошибка:\n`{e}`\n\nПодробности в консоли.",
+            parse_mode='Markdown'
+        )        
 # ====================== СИСТЕМА ТЕЛЕФОНА ======================
 @bot.message_handler(commands=['телефон'])
 def phone_menu(message):
