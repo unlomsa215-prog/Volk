@@ -4429,7 +4429,8 @@ def cancel_game_command(message):
 
 
 # ====================== СТАРТ И ПОМОЩЬ ======================
-@bot.message_handler(commands=['start', 'help', 'старт', 'помощь'])
+
+# =@bot.message_handler(commands=['start', 'help', 'старт', 'помощь'])
 def start_help(message):
     try:
         user_id = str(message.from_user.id)
@@ -4504,7 +4505,8 @@ def start_help(message):
             f"📢 Канал: {CHANNEL_USERNAME}\n"
             f"💬 Чат: {CHAT_LINK}"
         )
-        bot.send_message(message.chat.id, text, parse_mode='Markdown')
+        # ВАЖНО: убрали parse_mode='Markdown' — отправляем как обычный текст
+        bot.send_message(message.chat.id, text)
 
     except Exception as e:
         import traceback
@@ -4512,10 +4514,9 @@ def start_help(message):
         print(f"❌ Ошибка в start_help: {e}\n{error_trace}")
         bot.send_message(
             message.chat.id,
-            f"❌ Внутренняя ошибка:\n`{e}`\n\nПодробности в консоли.",
-            parse_mode='Markdown'
-        )   
-# ====================== СИСТЕМА ТЕЛЕФОНА ======================
+            f"❌ Внутренняя ошибка:\n`{e}`\n\nПодробности в консоли."
+            
+            )===================== СИСТЕМА ТЕЛЕФОНА ======================
 @bot.message_handler(commands=['телефон'])
 def phone_menu(message):
     user_id = str(message.from_user.id)
