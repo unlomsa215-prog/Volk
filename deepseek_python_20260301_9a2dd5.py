@@ -4504,6 +4504,9 @@ def start_help(message):
             f"💬 Чат: {CHAT_LINK}"
         )
         bot.send_message(message.chat.id, text, parse_mode='Markdown')
+    except Exception as e:
+        print(f"Ошибка в start_help: {e}")
+        bot.send_message(message.chat.id, "❌ Произошла ошибка при обработке команды.", parse_mode='Markdown')
         
 # ====================== СИСТЕМА ТЕЛЕФОНА ======================
 @bot.message_handler(commands=['телефон'])
