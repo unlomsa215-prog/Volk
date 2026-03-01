@@ -4430,79 +4430,84 @@ def cancel_game_command(message):
 # ====================== СТАРТ И ПОМОЩЬ ======================
 @bot.message_handler(commands=['start', 'help', 'старт', 'помощь'])
 def start_help(message):
-    user_id = str(message.from_user.id)
-    
-    if message.from_user.username:
-        update_username_cache(user_id, message.from_user.username)
-    
-    user = get_user(user_id)
-    
-    args = message.text.split()
-    if len(args) > 1 and args[1].isdigit():
-        referrer_id = args[1]
-        if referrer_id != user_id and referrer_id in users:
-            with get_user_lock(referrer_id), get_user_lock(user_id):
-                referrer = get_user(referrer_id)
-                user['referrer'] = referrer_id
-                referrer['referrals'] += 1
-                referrer['balance'] += bonus_data['referral_bonus']
-                referrer['krds_balance'] += 5
-                user['balance'] += 500
-                update_quest_progress(referrer_id, 'referrals', referrer['referrals'])
-                save_data()
-                
-                try:
-                    bot.send_message(int(referrer_id),
-                        f"🎉 По твоей ссылке зарегистрировался новый игрок!\n"
-                        f"💰 +{format_number(bonus_data['referral_bonus'])} кредиксов\n"
-                        f"💎 +5 KRDS", parse_mode='Markdown')
-                except:
-                    pass
-    
-    today = datetime.now().strftime('%Y-%m-%d')
-    if today not in user['daily_quests']:
-        generate_daily_quests(user_id)
-    
-    text = (
-        "🎰 ** ДОБРО ПОЖАЛОВАТЬ В КАЗИНО! ** 🎰\n\n"
-        "💰 **Баланс:** /баланс\n"
-        "📊 **Статистика:** /статистика\n"
-        "🏆 **Топ игроков:** /топ\n"
-        "👑 **VIP система:** /вип\n"
-        "📋 **Квесты:** /квесты\n"
-        "🏆 **Турниры:** /турнир\n"
-        "💎 **KRDS:** /донат\n"
-        "📱 **Телефон:** /телефон\n"
-        "🎉 **Ивент:** /ивент\n\n"
-        "🎮 **Доступные игры:**\n"
-        "• Башня: /башня [ставка]\n"
-        "• Футбол: /футбол [ставка]\n"
-        "• Баскетбол: /баскетбол [ставка]\n"
-        "• Дартс: /дартс [ставка]\n"
-        "• Покер: /покер [ставка]\n"
-        "• Пирамида: /пирамида [ставка]\n"
-        "• Мины: /мины [ставка]\n"
-        "• Слоты: /слоты [ставка]\n"
-        "• Рулетка: /рулетка_каз [ставка] [тип] [число]\n"
-        "• Хило: /хило [ставка]\n"
-        "• Очко: /очко [ставка]\n"
-        "• Краш: /краш [ставка]\n"
-        "• x2/x3/x5: /x2 [ставка]\n"
-        "• Фишки: /фишки [ставка] [black/white]\n"
-        "• Русская рулетка: /рулетка_рус [ставка]\n"
-        "• Джекпот: /джекпот [ставка]\n"
-        "• Кости: /кости [ставка] [больше6/меньше6/чет/нечет]\n\n"
-        "🐭 **Мышки:** /мышки\n"
-        "🐾 **Питомцы:** /питомцы\n"
-        "🏪 **Бизнес:** /бизнес\n"
-        "🏦 **Банк:** /банк\n"
-        "👥 **Рефералы:** /реф\n"
-        "💼 **Работа:** /работа\n\n"
-        "💡 Форматы ставок: 1к = 1000, 1кк/1ку = 1,000,000\n\n"
-        f"📢 Канал: {CHANNEL_USERNAME}\n"
-        f"💬 Чат: {CHAT_LINK}"
-    )
-    bot.send_message(message.chat.id, text, parse_mode='Markdown')
+    try:
+        user_id = str(message.from_user.id)
+        
+        if message.from_user.username:
+            update_username_cache(user_id, message.from_user.username)
+        
+        user = get_user(user_id)
+        
+        args = message.text.split()
+        if len(args) > 1 and args[1].isdigit():
+            referrer_id = args[1]
+            if referrer_id != user_id and referrer_id in users:
+                with get_user_lock(referrer_id), get_user_lock(user_id):
+                    referrer = get_user(referrer_id)
+                    user['referrer'] = referrer_id
+                    referrer['referrals'] += 1
+                    referrer['balance'] += bonus_data['referral_bonus']
+                    referrer['krds_balance'] += 5
+                    user['balance'] += 500
+                    update_quest_progress(referrer_id, 'referrals', referrer['referrals'])
+                    save_data()
+                    
+                    try:
+                        bot.send_message(int(referrer_id),
+                            f"🎉 По твоей ссылке зарегистрировался новый игрок!\n"
+                            f"💰 +{format_number(bonus_data['referral_bonus'])} кредиксов\n"
+                            f"💎 +5 KRDS", parse_mode='Markdown')
+                    except:
+                        pass
+        
+        today = datetime.now().strftime('%Y-%m-%d')
+        if today not in user['daily_quests']:
+            generate_daily_quests(user_id)
+        
+        text = (
+            "🎰 ** ДОБРО ПОЖАЛОВАТЬ В kредиkс! ** 🎰\n\n"
+            "💰 **Баланс:** /баланс\n"
+            "📊 **Статистика:** /статистика\n"
+            "🏆 **Топ игроков:** /топ\n"
+            "👑 **VIP система:** /вип\n"
+            "📋 **Квесты:** /квесты\n"
+            "🏆 **Турниры:** /турнир\n"
+            "💎 **KRDS:** /донат\n"
+            "📱 **Телефон:** /телефон\n"
+            "🎉 **Ивент:** /ивент\n\n"
+            "🎮 **Доступные игры:**\n"
+            "• Башня: /башня [ставка]\n"
+            "• Футбол: /футбол [ставка]\n"
+            "• Баскетбол: /баскетбол [ставка]\n"
+            "• Дартс: /дартс [ставка]\n"
+            "• Покер: /покер [ставка]\n"
+            "• Пирамида: /пирамида [ставка]\n"
+            "• Мины: /мины [ставка]\n"
+            "• Слоты: /слоты [ставка]\n"
+            "• Рулетка: /рулетка_каз [ставка] [тип] [число]\n"
+            "• Хило: /хило [ставка]\n"
+            "• Очко: /очко [ставка]\n"
+            "• Краш: /краш [ставка]\n"
+            "• x2/x3/x5: /x2 [ставка]\n"
+            "• Фишки: /фишки [ставка] [black/white]\n"
+            "• Русская рулетка: /рулетка_рус [ставка]\n"
+            "• Джекпот: /джекпот [ставка]\n"
+            "• Кости: /кости [ставка] [больше6/меньше6/чет/нечет]\n\n"
+            "🐭 **Мышки:** /мышки\n"
+            "🐾 **Питомцы:** /питомцы\n"
+            "🏪 **Бизнес:** /бизнес\n"
+            "🏦 **Банк:** /банк\n"
+            "👥 **Рефералы:** /реф\n"
+            "💼 **Работа:** /работа\n\n"
+            "💡 Форматы ставок: 1к = 1000, 1кк/1ку = 1,000,000\n\n"
+            f"📢 Канал: {CHANNEL_USERNAME}\n"
+            f"💬 Чат: {CHAT_LINK}"
+        )
+        bot.send_message(message.chat.id, text, parse_mode='Markdown')
+        
+    except Exception as e:
+        print(f"Ошибка в start_help: {e}")
+        bot.send_message(message.chat.id, "❌ Произошла внутренняя ошибка. Попробуйте позже.")
 
 # ====================== СИСТЕМА ТЕЛЕФОНА ======================
 @bot.message_handler(commands=['телефон'])
